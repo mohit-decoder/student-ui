@@ -1,0 +1,51 @@
+version: 2.1
+jobs:
+  build:
+    docker:
+      - image: maven:3.6.3-jdk-11
+
+    working_directory: ~/project
+
+    steps:
+      - checkout
+
+      - restore_cache:
+          key: dependency-cache-{{ checksum "pom.xml" }}
+
+      - run:
+          name: Build with Maven
+          command: mvn clean install -DskipTests=true
+
+      - save_cache:
+          key: dependency-cache-{{ checksum "pom.xml" }}
+          paths:
+            - ~/.m2/repository
+
+      - store_artifacts:
+          path: target/
+
+  test:
+    docker:
+      - image: maven:3.6.3-jdk-11
+
+    working_directory: ~/project
+
+    steps:
+      - checkout
+
+      - restore_cache:
+          key: dependency-cache-{{ checksum "pom.xml" }}
+
+      - run:
+          name: Build and test with Maven
+          command: mvn clean test
+
+
+workflows:
+  version: 2
+  build-and-test:
+    jobs:
+      - build
+      - test:
+          requires:
+            - build

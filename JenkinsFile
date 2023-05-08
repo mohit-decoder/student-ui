@@ -26,8 +26,8 @@ pipeline {
                 ], 
                         credentialsId: 'nexus3', 
                         groupId: 'com.jdevs', 
-                        nexusUrl: '54.193.169.160', 
-                        nexusVersion: 'nexus2', 
+                        nexusUrl: '172.31.25.70:8081', 
+                        nexusVersion: 'nexus3', 
                         protocol: 'http', 
                         repository: 'simpleapp-release', 
                         version: '2.3'

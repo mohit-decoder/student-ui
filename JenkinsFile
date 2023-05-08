@@ -1,0 +1,38 @@
+pipeline {
+    agent any
+    tools {
+        maven 'maven3'
+    }
+    stages {
+        stage('git-pull'){
+            steps{
+                git branch: 'main', credentialsId: 'gitcred', url: 'https://github.com/mohit-decoder/student-ui.git'
+            }
+        }stage('Build'){
+            steps{
+                    sh 'mvn clean package'
+            }
+        }
+        stage('upload war to nexus') {
+            steps{
+                nexusArtifactUploader artifacts: 
+                [
+                    [
+                        artifactId: 'studentapp',
+                        classifier: '', 
+                        file: 'target/studentapp-2.3.war', 
+                        type: 'war'
+                    ]
+                ], 
+                        credentialsId: 'nexus3', 
+                        groupId: 'com.jdevs', 
+                        nexusUrl: '172.31.25.70', 
+                        nexusVersion: 'nexus3', 
+                        protocol: 'http', 
+                        repository: 'simpleapp-release', 
+                        version: '2.3'
+            }
+        }
+
+    }
+}

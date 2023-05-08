@@ -3,6 +3,7 @@
   <groupId>com.jdevs</groupId>
   <artifactId>studentapp</artifactId>
   <version>2.3</version>
+  <name>studentapp</name>
   <packaging>war</packaging>
   <build>
     <sourceDirectory>src</sourceDirectory>
